@@ -11,10 +11,13 @@ const s = (p) => {
   let loadButton;
   let savedata = { "data1": 100, "data2": 200, "data3": 300 };
   let loaddata;
+  let pref_path;
 
-  const path = window.api.path;
-  const pref_path = path.resolve('') + '/pref.json';
 
+  p.dirnameGet = (arg) => {
+    console.group(arg);
+    pref_path = arg + '/pref.json';;
+  }
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight);
 
@@ -28,8 +31,12 @@ const s = (p) => {
     loadButton.size(60, 60);
     loadButton.mousePressed(p.loadFile);
 
+    //
+    window.api.GetDirname();
+
     // ダイアログ選択したあと、呼ばれる関数を登録しておく
     window.api.DialogResult((arg) => p.dialogResult(arg));
+    window.api.DirnameGet((arg) => p.dirnameGet(arg));
   }
 
   p.draw = () => {
