@@ -28,7 +28,7 @@ const s = (p) => {
   }
 
   p.draw = () => {
-    p.background(255, 200, 100);
+    p.background(50, 200, 100);
 
     p.textSize(14);
     p.textAlign(p.LEFT, p.CENTER);
