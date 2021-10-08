@@ -1,6 +1,7 @@
 # Electron + p5js (File Save & Load)
 
-Electronとp5jsをつかった、JSONファイルのセーブとロードができるサンプルです。アプリケーションの設定をセーブ・ロードすることを想定しています。
+Electron（Electron Fiddleではありません）とp5jsをつかった、JSONファイルのセーブとロードができるサンプルです。アプリケーションの設定をセーブ・ロードすることを想定しています。
+
 
 <img src = "./screenshot_01.png"></img>
 
