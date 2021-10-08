@@ -14,10 +14,7 @@ const s = (p) => {
   let pref_path;
 
 
-  p.dirnameGet = (arg) => {
-    console.group(arg);
-    pref_path = arg + '/pref.json';;
-  }
+
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight);
 
@@ -31,12 +28,13 @@ const s = (p) => {
     loadButton.size(60, 60);
     loadButton.mousePressed(p.loadFile);
 
-    //
+    // main.jsへ、__dirnameを取得するための関数を呼び出す
     window.api.GetDirname();
+    // __dirnameを取得できたら、呼ばれる関数を登録しておく
+    window.api.DirnameGet((arg) => p.dirnameGet(arg));
 
     // ダイアログ選択したあと、呼ばれる関数を登録しておく
     window.api.DialogResult((arg) => p.dialogResult(arg));
-    window.api.DirnameGet((arg) => p.dirnameGet(arg));
   }
 
   p.draw = () => {
@@ -47,6 +45,12 @@ const s = (p) => {
     p.fill(255);
     p.noStroke();
     p.text(JSON.stringify(loaddata), 30, 150);
+  }
+
+  // __dirnameを取得できたとき
+  p.dirnameGet = (arg) => {
+    // console.group(arg);
+    pref_path = arg + '/pref.json';;
   }
 
   // 設定の保存

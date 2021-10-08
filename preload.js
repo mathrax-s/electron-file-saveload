@@ -18,15 +18,18 @@ contextBridge.exposeInMainWorld(
   "api", {
   fs: _fs,
 
-  //ダイアログを呼び出す
+  // ダイアログを呼び出す
   Dialog: (msg) => ipcRenderer.send("dialog_p5", msg),
 
+  // main.jsから__dirnameを取得する
   GetDirname: () => ipcRenderer.send("get_dirname"),
 
-  //ダイアログのボタンを押した時、関数を呼び出し、引数を渡す
+  // ダイアログのボタンを押した時、関数を呼び出し引数として渡す
   DialogResult: (f) => {
     ipcRenderer.on('result_dialog', (event, arg) => f(arg))
   },
+
+  // main.jsから__dirnameを返し、関数を呼び出して引数として渡す
   DirnameGet: (f) => {
     ipcRenderer.on('dirname', (event, arg) => f(arg))
   }
