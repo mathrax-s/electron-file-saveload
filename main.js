@@ -3,10 +3,11 @@ const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
 let selectedPortInfo = null;
+let mainWindow = null;
 
 function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 500,
     height: 300,
     webPreferences: {
@@ -45,3 +46,22 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+const { ipcMain, dialog } = require('electron')
+
+// ダイアログのアイコン
+const nativeImage = require('electron').nativeImage
+const image = nativeImage.createFromPath(path.join(__dirname, '/image/icon.png'))
+
+ipcMain.on("dialog_p5", (event, arg) => {
+  let options = {
+    type: 'question',
+    buttons: ['Cancel', 'OK'],
+    title: '上書き確認',
+    icon: image,
+    message: arg,
+    defaultId: 0,
+    cancelId: -1,
+  };
+  const result = dialog.showMessageBoxSync(mainWindow, options);
+  event.reply('result_dialog', result)
+});

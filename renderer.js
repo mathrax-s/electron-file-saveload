@@ -11,7 +11,9 @@ const s = (p) => {
   let loadButton;
   let savedata = { "data1": 100, "data2": 200, "data3": 300 };
   let loaddata;
-  let message = '';
+
+  const path = window.api.path;
+  const pref_path = path.resolve('') + '/pref.json';
 
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight);
@@ -25,6 +27,9 @@ const s = (p) => {
     loadButton.position(90, 30);
     loadButton.size(60, 60);
     loadButton.mousePressed(p.loadFile);
+
+    // ダイアログ選択したあと、呼ばれる関数を登録しておく
+    window.api.DialogResult((arg) => p.dialogResult(arg));
   }
 
   p.draw = () => {
@@ -39,18 +44,55 @@ const s = (p) => {
 
   // 設定の保存
   p.saveFile = () => {
-    //JSONで保存
-    p.save(savedata, "pref.json");
+    let exists = 0;
+    // ファイルの存在を確認する
+    if (window.api.fs.existsSync((pref_path))) {
+      // console.log('存在する');
+      exists = 1;
+      window.api.Dialog('設定を上書きしますか？');
+      //このあと、dialogのボタン選択が「OK」なら、
+      // p.dialogResult 関数へ
+    } else {
+      // console.log('存在しない');
+    }
+
+    if (exists == 0) {
+      // 書き込み実行
+      p.saveProcess(pref_path, savedata);
+    }
+
   }
 
-  // 設定の読み込み
-  p.loadFile = () => {
-    // 同階層に'pref.json'ファイルが存在していなければ、新規作成
-    // 存在していれば、loaddataに読み込み
+  // ダイアログの返答があったとき呼ばれる
+  // main.js の event.reply
+  p.dialogResult = (arg) => {
+    // OK のとき
+    if (arg == 1) {
+      //書き込み実行
+      p.saveProcess(pref_path, savedata);
+    }
+  }
 
-    const path = window.api.path;
-    const pref_path = path.resolve('') + '/pref.json';
-    // console.log(pref_path);
+  // ファイル書き込み
+  // JSONを文字列にして保存
+  p.saveProcess = (_path, _data) => {
+    const fs = window.api.fs;
+    try {
+      fs.writeFileSync(
+        _path,
+        JSON.stringify(_data),
+        'utf8'
+      )
+    } catch (err) {
+      // console.log(err)
+    }
+  }
+
+
+  // ファイルの読み込み
+  // 同階層に'pref.json'ファイルが存在していなければ、新規作成
+  // 存在していれば、loaddataに読み込み
+  p.loadFile = () => {
 
     let exists = 0;
     // ファイルの存在を確認する
@@ -59,24 +101,15 @@ const s = (p) => {
       exists = 1;
     } else {
       // console.log('存在しない');
-      // 存在しないとき
-      const fs = window.api.fs;
-      // 'pref.json'を新規作成
-      try {
-        fs.writeFileSync(
-          pref_path,
-          JSON.stringify(savedata),
-          'utf8'
-        )
-      } catch (err) {
-        // console.log(err)
-      }
     }
 
     // 'pref.json'が存在していれば、JSON形式で読み込み
     if (exists == 1) {
       loaddata = p.loadJSON(pref_path);
       console.log(loaddata);
+    } else {
+      // 存在しないとき、'pref.json'を新規作成して書き込み実行
+      p.saveProcess(pref_path, savedata);
     }
   }
 }
