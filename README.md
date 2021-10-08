@@ -4,9 +4,8 @@ Electron（Electron Fiddleではありません）とp5jsをつかった、JSON�
 
 
 <img src = "./screenshot_01.png"></img>
-<audio data-autoplay>
-    <source src=type="video/mov">
-</audio><div class="c-video">
+
+<div class="c-video">
   <video
   class="c-video__embed"
   src="https://user-images.githubusercontent.com/34113514/136553985-b1813133-b3af-4709-8a11-37104474e470.mov" 
