@@ -7,7 +7,7 @@ let selectedPortInfo = null;
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1000,
+    width: 500,
     height: 300,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -19,7 +19,7 @@ function createWindow() {
 
   // Open the DevTools.
   // デバッグツールをつかう
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
